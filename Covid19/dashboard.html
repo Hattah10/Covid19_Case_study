@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    
+
+</head>
+<body>
+    <div class="sidebar">
+      <div class="logo-details">
+        <i class='bx bxs-virus-block icon'></i>
+          <div class="logo_name">COVID19</div>
+          <i class='bx bx-menu' id="btn" ></i>
+      </div>
+      <ul class="nav-list">
+        <li>
+            <i class='bx bx-search' ></i>
+           <input type="text" placeholder="Search...">
+           <span class="tooltip">Search</span>
+        </li>
+        <li>
+          <a href="dashboard.html">
+            <i class='bx bx-grid-alt'></i>
+            <span class="links_name">Dashboard</span>
+          </a>
+           <span class="tooltip">Dashboard</span>
+        </li>
+        <li>
+         <a href="form.html">
+            <i class='bx bx-table'></i>
+           <span class="links_name">Data Table</span>
+         </a>
+         <span class="tooltip">Data Table</span>
+       </li>
+       <li>
+         
+       <li>
+         <a href="#">
+           <i class='bx bx-pie-chart-alt-2' ></i>
+           <span class="links_name">Analytics</span>
+         </a>
+         <span class="tooltip">Analytics</span>
+       </li>
+       
+       <li class="profile">
+           <div class="profile-details">
+             <img src="img/4.jpg" alt="profileImg">
+             <div class="name_job">
+               <div class="name">Hypeconic</div>
+               <div class="job">Admin</div>
+             </div>
+           </div>
+           <i class='bx bx-log-out' id="log_out" ></i>
+       </li>
+      </ul>
+    </div>
+
+    <section class="home-section col">
+        <div class="text">Dashboard</div>
+        <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+            <div class="col">
+              <div class="card card1">
+                <div class="card-body text-center">
+                  <h2 class="card-title " id="allcovidencounter"></h2>
+                  <p class="card-text">COVID-19 ENCOUNTER</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col">
+              <div class="card card2">
+                <div class="card-body text-center">
+                  <h2 class="card-title " id="allvaccinated"></h2>
+                  <p class="card-text" >VACCINATED</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col">
+                <div class="card card3">
+                  <div class="card-body text-center">
+                    <h2 class="card-title " id="allfever"></h2>
+                    <p class="card-text">FEVER</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="card card4">
+                  <div class="card-body text-center">
+                    <h2 class="card-title " id="alladult"></h2>
+                    <p class="card-text">ADULT</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="card card5">
+                  <div class="card-body text-center">
+                    <h2 class="card-title" id="allminor"></h2>
+                    <p class="card-text">MINOR</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="card card6">
+                  <div class="card-body text-center">
+                    <h2 class="card-title" id="allforeigner">1000</h2>
+                    <p class="card-text">FOREIGNER</p>
+                  </div>
+                </div>
+              </div>
+            
+          </div>
+
+          <div class="row graphcontainer mt-4" >
+            <div class="col-6 ">
+              <canvas id="bargraph">
+            </div>
+
+            <div class="col-6">
+              <canvas id="piegraph">
+            </div>
+
+          </div>
+          
+        </div>
+       
+        
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="js/dashboard.js"></script>
+  
+    <script>
+
+      function count(){
+        $.ajax({
+          url: "getcount.php",
+          method: "GET",
+          success: function(data) {
+
+            var age_result = [];
+            var result = [];
+            var vaccinated = [];
+            var diagnosed = [];
+            var encounter = [];
+            var adult = [];
+            var minor = [];
+            var foreigner = [];
+
+
+
+            for(var i in data) {
+              result.push(data[i].encounter_count);
+              result.push(data[i].vaccinated_count);
+              result.push(data[i].diagnosed_count);
+              age_result.push(data[i].adult_count);
+              age_result.push(data[i].minor_count);
+              vaccinated.push(data[i].vaccinated_count);
+              diagnosed.push(data[i].diagnosed_count);
+              encounter.push(data[i].encounter_count);
+              adult.push(data[i].adult_count);
+              minor.push(data[i].minor_count);
+              foreigner.push(data[i].foreigner_count);
+
+            }
+      
+      
+              $('#allcovidencounter').text(encounter);
+              $('#allvaccinated').text(vaccinated);
+              $('#allfever').text(diagnosed);
+              $('#alladult').text(adult);
+              $('#allminor').text(minor);
+              $('#allforeigner').text(foreigner);
+      
+            
+              var x_label = [ 'Encounter', 'Vaccinated','Diagnosed'];
+          
+                    var chartdata = {
+                  labels: x_label,
+                  datasets : [
+                    {
+                      label: 'Covid 19 Positive',
+                      backgroundColor: ['rgba(200, 200, 200, 0.75)', 'rgba(100, 100, 200, 0.75)', 'rgba(150, 200, 100, 0.75)'],
+                      borderColor: 'rgba(200, 200, 200, 200)',
+                      hoverBorderColor: 'rgba(200, 200, 200, 1)',
+                      data: result
+                    }
+                  ]
+                };
+
+             var chartOptions = {
+              responsive: true,
+              maintainAspectRatio: false 
+                };
+
+
+                var pieOptions = {
+                  responsive: true,
+                   maintainAspectRatio: false,
+                  scales: {
+                            x: [{
+                                display: false // hide x-axis
+                            }],
+                            y: [{
+                                display: false // hide y-axis
+                            }]
+                        }, 
+                    plugins: {
+                          legend: {
+                              display: true,
+                              labels: {
+                                  font: {
+                                      size: 16,
+                                      color: 'white'
+                                  }
+                              }
+                          },
+                          title: {
+                              display: true,
+                              text: 'Age Distribution of COVID-19 Cases',
+                              font: {
+                                  size: 18,
+                                  color: 'white'
+                              }
+                          }
+                      }
+                  };
+      
+              var ctx = $("#bargraph");
+        
+              var barGraph = new Chart(ctx, {
+                type: 'bar',
+                data: chartdata,
+                options: chartOptions
+
+              });
+
+
+              var xy_label = [ 'Adult', 'Minor'];
+                  
+                  var doughnutdata = {
+                labels: xy_label,
+                datasets : [
+                  {
+                    label: 'Age Distribution of COVID-19 Cases',
+                    backgroundColor: ['rgba(200, 200, 200, 0.75)', 'rgba(100, 100, 200, 0.75)', 'rgba(150, 200, 100, 0.75)'],
+                    borderColor: 'rgba(200, 200, 200, 200)',
+                    hoverBorderColor: 'rgba(200, 200, 200, 1)',
+                    data: age_result
+                  }
+                ]
+              };
+
+
+            var cty = $("#piegraph");
+      
+            var pieGraph = new Chart(cty, {
+              type: 'doughnut',
+              data: doughnutdata,
+              options: pieOptions
+            });
+       
+      
+          },
+      
+          error: function(data) {
+            console.log(data);
+          }
+      
+      
+      
+        });
+      }
+      
+      
+      $(document).ready(function () {
+                  count();
+              });
+      
+      
+        </script>
+  
+  
+  </body>
+</body>
+</html>
